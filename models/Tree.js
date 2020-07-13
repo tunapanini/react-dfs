@@ -3,19 +3,18 @@ class Tree {
     this.root = root;
   }
 
-  *DFS(stack) {
+  *traverse(stackOrQueue) {
     const visited = [];
-    stack.push(this.root);
+    stackOrQueue.push(this.root);
 
-    yield { elements: stack.elements, visited };
-
-    while (!stack.isEmpty()) {
-      const current = stack.pop();
+    yield { elements: stackOrQueue.elements, visited };
+    while (!stackOrQueue.isEmpty()) {
+      const current = stackOrQueue.pop();
       visited.push(current);
-      yield { elements: stack.elements, visited };
+      yield { elements: stackOrQueue.elements, visited };
       if (current.children.length > 0) {
-        current.children.forEach(child => stack.push(child));
-        yield { elements: stack.elements, visited };
+        current.children.forEach(child => stackOrQueue.push(child));
+        yield { elements: stackOrQueue.elements, visited };
       }
     }
   }

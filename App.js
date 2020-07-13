@@ -6,6 +6,7 @@ import Node from "./models/Node";
 import Tree from "./models/Tree";
 import StackBox from "./components/StackBox";
 import Stack from "./models/Stack";
+import Queue from "./models/Queue";
 
 const root = new Node("A");
 const nodeB = root.add("B");
@@ -21,22 +22,31 @@ nodeC.add("H");
 
 const tree = new Tree(root);
 
+const TRAVERSE_MODE = {
+  DFS: 0,
+  BFS: 1
+};
 const App = () => {
   const [elements, setElements] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-  const [restart, setRestart] = React.useState(null);
+  const [traverseMode, setTraverseMode] = React.useState(null);
 
   React.useEffect(() => {
-    if (restart !== false) {
-      const myStack = new Stack();
-      const dfsGen = tree.DFS(myStack);
+    if (traverseMode !== null) {
+      let unvisited;
+      if (traverseMode === TRAVERSE_MODE.BFS) {
+        unvisited = new Queue();
+      } else {
+        unvisited = new Stack();
+      }
+      const traverseGen = tree.traverse(unvisited);
       const interval = setInterval(() => {
-        const result = dfsGen.next();
+        const result = traverseGen.next();
         if (!result.done) {
           setSelected([...result.value.visited]);
           setElements([...result.value.elements]);
         } else {
-          setRestart(false);
+          setTraverseMode(null);
           dispose();
         }
       }, 2000);
@@ -45,7 +55,7 @@ const App = () => {
       };
       return () => dispose();
     }
-  }, [restart, setRestart]);
+  }, [traverseMode, setTraverseMode]);
 
   return (
     <div
@@ -59,9 +69,9 @@ const App = () => {
         elements={elements.map(el => ({ id: el.id, value: el.value.value }))}
       />
       <TreeBox tree={tree} selected={selected.map(node => Number(node.id))} />
-      {restart === false && (
-        <button onClick={() => setRestart(true)}>Restart</button>
-      )}
+      {traverseMode !== null && `traverse ${TRAVERSE_MODE.DFS ? "DFS" : "BFS"}`}
+      <button onClick={() => setTraverseMode(TRAVERSE_MODE.DFS)}>DFS</button>
+      <button onClick={() => setTraverseMode(TRAVERSE_MODE.BFS)}>BFS</button>
     </div>
   );
 };
