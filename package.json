@@ -1,5 +1,5 @@
 {
-  "name": "js-xg1qfp",
+  "name": "react-dfs",
   "version": "0.0.0",
   "private": true,
   "dependencies": {
@@ -12,5 +12,7 @@
   },
   "scripts": {
     "start": "parcel ./index.html"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }
