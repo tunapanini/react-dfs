@@ -5,8 +5,8 @@ class Queue {
   }
 
   push(value) {
-    this.elements.push({ value, id: this.currentId });
-    this.currentId += 1;
+    this.elements.push({ value, id: Queue.currentId });
+    Queue.currentId += 1;
   }
 
   pop() {
@@ -25,4 +25,5 @@ class Queue {
 }
 
 Queue.currentId = 1;
+
 export default Queue;
